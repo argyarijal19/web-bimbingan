@@ -1,0 +1,1 @@
+start ssh -L 3306:10.14.200.20:42136 osdep@croot.ypbpi.or.id -p 60606 

@@ -1,0 +1,140 @@
+{% extends 'components/base.html' %}
+{% block title %} dashboard {% endblock %}
+{% block content %}
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+  <section class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1>Selamat Datang {{nama}}</h1>
+          {{cek}}
+        </div>
+      </div>
+    </div><!-- /.container-fluid -->
+  </section>
+  <!-- Main content -->
+  <section class="content">
+      <div class="container-fluid">
+
+        <!-- SELECT2 EXAMPLE -->
+        <div class="card card-default">
+          <div class="card-header">
+            <h3 class="card-title">Pilih Tipe Bimbingan</h3>
+
+            <div class="card-tools">
+              <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                <i class="fas fa-minus"></i>
+              </button>
+            </div>
+          </div>
+          <!-- /.card-header -->
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                    <form action="{{ url_for('index') }}" method="post">
+                    <label>Tipe Bimbingan</label>
+                    <select name="tipe" class="form-control select2bs4" placeholder="Select a State" style="width: 100%;">
+                      <option value="" disabled selected>Pilih Tipe Bimbingan</option>
+                      {% for data in data_tipe %}
+                      <option value="{{ data.tipe }}">{{ data.nama }}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                </div>
+                <!-- /.col -->
+                <div class="col-md-6">
+                  <div class="form-group">
+                    <label>Tahun Ajaran</label>
+                    <select name="tahun" class="form-control select2bs4" data-placeholder="Pilih Tahun Ajaran"
+                            style="width: 100%;">
+                      <option value="" disabled selected>Pilih Tahun Ajaran</option>
+                      {% for tahun in data_tahun %}
+                      <option value="{{tahun.tahun}}">{{tahun.tahun}}</option>
+                      {% endfor %}
+                    </select>
+                  </div>
+                  <!-- /.form-group -->
+                </div>
+                <!-- /.col -->
+              </div>
+              <input type="submit" value="submit" class="btn btn-primary">
+              <!-- /.row -->
+            </div>   
+          </form>
+          <!-- /.card-body -->
+          <div class="card-footer">
+            Pilih Tahun Ajaran Dan Tipe Bimbingan Untuk Menampilkan Data Bimbingan
+          </div>
+        </div>
+      </div>
+  </section>
+  <!-- /.content -->
+  <section class="content">
+        <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                <h3 class="card-title">Data Mahasiswa Bimbingan</h3>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                <table id="example2" class="table table-bordered table-hover">
+                    <thead>
+                    <tr>
+                    <th>NPM</th>
+                    <th>Nama Mahasiswa</th>
+                    <th>Pembimbing 1</th>
+                    <th>Pembimbing 2</th>
+                    <th>Judul</th>
+                    <th>Total Bimbingan</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        {% for mhs in hasil %}
+                    <tr>
+                      <td>{{ mhs[0] }}</td>
+                      {% for nama in mahasiswa %}
+                        {% if nama[0] in mhs[0] %}
+                        <td>{{ nama[1] }}</td>
+                        {% endif %}
+                      {% endfor %}
+                      {% for d in dosen if d[0] in mhs[1] %}
+                        <td>{{ d[1] }}</td>
+                      {% endfor %}
+                      {% for d in dosen if d[0] in mhs[2] %}
+                        <td>{{ d[1] }}</td>
+                        {% else %}
+                        <td>-</td>
+                      {% endfor %}
+                    <td>{{ mhs[3] }}</td>
+                    {% for per in pertemuan if per[0] in mhs[0] and per[2] in mhs[4] %}
+                        <td>{{ per[1] }}</td>
+                      {% else %}
+                      <td>0</td>
+                    {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+        </div>
+        <!-- /.container-fluid -->
+    </section>
+</div>
+  <!-- Control Sidebar -->
+  <aside class="control-sidebar control-sidebar-dark">
+    <!-- Control sidebar content goes here -->
+  </aside>
+  <!-- /.control-sidebar -->
+
+{% endblock %}
